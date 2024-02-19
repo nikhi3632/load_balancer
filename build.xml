@@ -1,0 +1,66 @@
+<project name="LoadBalancer" default="build" basedir=".">
+
+    <!-- Define properties -->
+    <property name="src.dir" value="src/main"/>
+    <property name="build.dir" value="build"/>
+    <property name="dist.dir" value="dist"/>
+    <property name="lib.dir" value="lib"/>
+
+    <!-- Compile load balancer module -->
+    <target name="compile-loadbalancer">
+        <mkdir dir="${build.dir}/loadbalancer"/>
+        <javac srcdir="${src.dir}/com/loadbalancer" destdir="${build.dir}/loadbalancer" includeantruntime="false">
+            <classpath>
+                <fileset dir="${lib.dir}" includes="*.jar"/>
+            </classpath>
+        </javac>
+    </target>
+
+    <!-- Compile client module -->
+    <target name="compile-client">
+        <mkdir dir="${build.dir}/client"/>
+        <javac srcdir="${src.dir}/com/client" destdir="${build.dir}/client" includeantruntime="false">
+            <classpath>
+                <fileset dir="${lib.dir}" includes="*.jar"/>
+            </classpath>
+        </javac>
+    </target>
+
+    <!-- Compile server module -->
+    <target name="compile-server">
+        <mkdir dir="${build.dir}/server"/>
+        <javac srcdir="${src.dir}/com/server" destdir="${build.dir}/server" includeantruntime="false">
+            <classpath>
+                <fileset dir="${lib.dir}" includes="*.jar"/>
+            </classpath>
+        </javac>
+    </target>
+
+    <!-- Create loadbalancer.jar -->
+    <target name="jar-loadbalancer" depends="compile-loadbalancer">
+        <mkdir dir="${dist.dir}"/>
+        <jar destfile="${dist.dir}/loadbalancer.jar" basedir="${build.dir}/loadbalancer"/>
+    </target>
+
+    <!-- Create client.jar -->
+    <target name="jar-client" depends="compile-client">
+        <mkdir dir="${dist.dir}"/>
+        <jar destfile="${dist.dir}/client.jar" basedir="${build.dir}/client"/>
+    </target>
+
+    <!-- Create server.jar -->
+    <target name="jar-server" depends="compile-server">
+        <mkdir dir="${dist.dir}"/>
+        <jar destfile="${dist.dir}/server.jar" basedir="${build.dir}/server"/>
+    </target>
+
+    <!-- Build all modules -->
+    <target name="build" depends="jar-loadbalancer, jar-client, jar-server"/>
+
+    <!-- Clean target -->
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+    </target>
+
+</project>
