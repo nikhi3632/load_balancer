@@ -1,4 +1,4 @@
-<project name="LoadBalancer" default="build" basedir=".">
+<project name="Project_LoadBalancer" default="build" basedir=".">
 
     <!-- Define properties -->
     <property name="src.dir" value="src/main"/>
@@ -10,16 +10,6 @@
     <target name="compile-loadbalancer">
         <mkdir dir="${build.dir}/loadbalancer"/>
         <javac srcdir="${src.dir}/com/loadbalancer" destdir="${build.dir}/loadbalancer" includeantruntime="false">
-            <classpath>
-                <fileset dir="${lib.dir}" includes="*.jar"/>
-            </classpath>
-        </javac>
-    </target>
-
-    <!-- Compile client module -->
-    <target name="compile-client">
-        <mkdir dir="${build.dir}/client"/>
-        <javac srcdir="${src.dir}/com/client" destdir="${build.dir}/client" includeantruntime="false">
             <classpath>
                 <fileset dir="${lib.dir}" includes="*.jar"/>
             </classpath>
@@ -42,12 +32,6 @@
         <jar destfile="${dist.dir}/loadbalancer.jar" basedir="${build.dir}/loadbalancer"/>
     </target>
 
-    <!-- Create client.jar -->
-    <target name="jar-client" depends="compile-client">
-        <mkdir dir="${dist.dir}"/>
-        <jar destfile="${dist.dir}/client.jar" basedir="${build.dir}/client"/>
-    </target>
-
     <!-- Create server.jar -->
     <target name="jar-server" depends="compile-server">
         <mkdir dir="${dist.dir}"/>
@@ -55,7 +39,7 @@
     </target>
 
     <!-- Build all modules -->
-    <target name="build" depends="jar-loadbalancer, jar-client, jar-server"/>
+    <target name="build" depends="jar-loadbalancer, jar-server"/>
 
     <!-- Clean target -->
     <target name="clean">
