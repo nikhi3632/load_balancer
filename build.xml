@@ -1,4 +1,4 @@
-<project name="Project_LoadBalancer" default="build" basedir=".">
+<project name="LoadBalancerProject" default="build" basedir=".">
 
     <!-- Define properties -->
     <property name="src.dir" value="src/main"/>
@@ -13,6 +13,9 @@
             <classpath>
                 <fileset dir="${lib.dir}" includes="*.jar"/>
             </classpath>
+            <!-- Set compiler options -->
+            <compilerarg value="-Xlint:-options"/>
+            <compilerarg value="-proc:none"/>
         </javac>
     </target>
 
@@ -23,6 +26,9 @@
             <classpath>
                 <fileset dir="${lib.dir}" includes="*.jar"/>
             </classpath>
+            <!-- Set compiler options -->
+            <compilerarg value="-Xlint:-options"/>
+            <compilerarg value="-proc:none"/>
         </javac>
     </target>
 

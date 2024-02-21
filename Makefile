@@ -1,3 +1,5 @@
+CC := java
+LOG_LEVEL := INFO
 IMAGE_NAME := loadbalancer
 IMAGE_TAG := latest
 PROJECT_DIR := $(CURDIR)
@@ -18,4 +20,4 @@ docker-clean:
 	docker rmi -f $(IMAGE_NAME):$(IMAGE_TAG)
 
 run-server:
-	java -Dlog.level=INFO -cp "build/server:lib/*" com.server.Server
+	$(CC) -Dlog.level=${LOG_LEVEL} -cp "build/server:lib/*" com.server.Server
