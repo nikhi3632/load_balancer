@@ -55,7 +55,7 @@ The output logs can be monitored.
 
 ## Demo
 
-[Watch Demo Video](demo/demo.mp4)
+[Demo Video](demo/demo.mp4)
 
 Kill the run_loadbalancer.sh script first and then the run_server.sh next using Ctrl/Command + C.
 
