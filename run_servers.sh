@@ -4,12 +4,14 @@ echo_message() {
     echo "[RUN_SERVERS] $1"
 }
 
-declare -a ports=(8081 8082 8083)
+# Read server URLs from urls.txt
+declare -a urls=($(cat server_urls.txt))
 
 start_server() {
-    local ip_address="$1"
-    local port="$2"
-    local log_level="$3"
+    local url="$1"
+    local log_level="$2"
+    local ip_address=$(echo "$url" | awk -F[/:] '{print $4}')
+    local port=$(echo "$url" | awk -F[/:] '{print $5}')
     java -Dlog.level="$log_level" -cp "build/server:lib/*" com.server.Main "$ip_address" "$port" &
 }
 
@@ -30,7 +32,8 @@ trap 'shutdown_servers' SIGINT
 
 # Function to shutdown all servers
 shutdown_servers() {
-    for port in "${ports[@]}"; do
+    for url in "${urls[@]}"; do
+        local port=$(echo "$url" | awk -F[/:] '{print $5}')
         shutdown_server "$port"
     done
     wait_for_shutdown
@@ -57,8 +60,8 @@ print_exit_message() {
 }
 
 # Start servers
-for port in "${ports[@]}"; do
-    start_server "127.0.0.1" "$port" "INFO"
+for url in "${urls[@]}"; do
+    start_server "$url" "INFO"
 done
 
 # Loop indefinitely to keep the script running
