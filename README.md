@@ -20,7 +20,7 @@ ant
 
 You will find the build class files in build directory and two jar files server.jar and loadbalancer.jar created in the dist directory.
 
-The scripts and the server_urls.txt are setup in such a way that we have three servers at [http://127.0.0.1:8081](http://127.0.0.1:8081), [http://127.0.0.1:8082](http://127.0.0.1:8082), [http://127.0.0.1:8083](http://127.0.0.1:8083) and the loadbalancer is at [http://127.0.0.1:8080](http://127.0.0.1:8080). These can be modified to suit the requirements if needed.
+The scripts and the server_urls.txt are setup in such a way that we have three servers at 127.0.0.1:8081, 127.0.0.1:8082, 127.0.0.1:8083 and the loadbalancer is at 127.0.0.1:8080. These can be modified to suit the requirements if needed.
 
 To see the project in action open three terminals:
 
