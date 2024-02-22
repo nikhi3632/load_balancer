@@ -1,1 +1,1 @@
-### WIP
+### A simple layer seven application load balancer, which routes HTTP requests from clients to a pool of HTTP servers based on round robin strategy.
