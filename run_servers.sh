@@ -12,7 +12,7 @@ start_server() {
     local log_level="$2"
     local ip_address=$(echo "$url" | awk -F[/:] '{print $4}')
     local port=$(echo "$url" | awk -F[/:] '{print $5}')
-    java -Dlog.level="$log_level" -cp "build/server:lib/*" com.server.Main "$ip_address" "$port" &
+    java -Dlog.level="$log_level" -cp "dist/server.jar:lib/*" com.server.Main "$ip_address" "$port" &
 }
 
 # Function to gracefully shutdown the server
@@ -42,7 +42,7 @@ shutdown_servers() {
 # Function to wait for servers to fully shutdown
 wait_for_shutdown() {
     while true; do
-        local running_servers=$(pgrep -f "java -Dlog.level=INFO -cp build/server:lib/* com.server.Main" | wc -l)
+        local running_servers=$(pgrep -f "java -Dlog.level=INFO -cp server.jar:lib/* com.server.Main" | wc -l)
         if [ "$running_servers" -eq 0 ]; then
             print_exit_message
             break
