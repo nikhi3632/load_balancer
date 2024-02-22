@@ -18,6 +18,3 @@ docker-clean:
 
 	@echo "Delete the Docker image locally...without affecting remote repositories"
 	docker rmi -f $(IMAGE_NAME):$(IMAGE_TAG)
-
-run-server:
-	$(CC) -Dlog.level=${LOG_LEVEL} -cp "build/server:lib/*" com.server.Server
