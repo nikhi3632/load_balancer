@@ -1,1 +1,6 @@
 LoadBalancerProject
+curl -vL http://127.0.0.1:8080
+The client sends a request to the load balancer.
+The load balancer forwards the request to a selected server.
+The server processes the request and generates a response.
+The server sends the response to the client.
