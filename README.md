@@ -1,6 +1,6 @@
 ### A simple layer seven application load balancer, which routes HTTP requests from clients to a pool of HTTP servers based on round robin strategy.
 
-To setup development environment fire up [Docker Desktop](https://www.docker.com/products/docker-desktop/) and use the following commands:
+To setup development environment clone the repository and fire up [Docker Desktop](https://www.docker.com/products/docker-desktop/) and use the following commands:
 
 ```bash
 make docker-build
