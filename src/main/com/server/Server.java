@@ -62,14 +62,14 @@ public class Server {
         new Thread(() -> {
             while (true) {
                 try {
-                    // boolean previousHealth = serverHealth.isHealthy(); // Initialize with current health status
+                    boolean previousHealth = serverHealth.isHealthy(); // Initialize with current health status
                     Thread.sleep(5000); // Check health every 5 seconds
                     boolean currentHealth = serverHealth.isHealthy();
-                    // if (currentHealth != previousHealth) {
-                    //     logServerHealth(currentHealth);
-                    //     previousHealth = currentHealth; // Update previous health status
-                    // }
-                    logServerHealth(currentHealth);
+                    if (currentHealth != previousHealth) {
+                        logServerHealth(currentHealth);
+                        previousHealth = currentHealth; // Update previous health status
+                    }
+                    // logServerHealth(currentHealth);
                 } catch (InterruptedException e) {
                     logger.error("Health check thread interrupted.", e);
                     Thread.currentThread().interrupt();
@@ -93,12 +93,12 @@ public class Server {
             long threadId = Thread.currentThread().threadId();
             String processId = ManagementFactory.getRuntimeMXBean().getName();
 
-            String clientIpAddress = request.ip();
-            int clientPort = request.port();
+            String requestIpAddress = request.ip();
+            int requestPort = request.port();
 
             String requestBody = request.body();
             logger.info("Request received from {}:{} on {}:{}: {} (Thread: {}, Process: {})",
-                    clientIpAddress, clientPort, ip, port, requestBody, threadId, processId);
+                requestIpAddress, requestPort, ip, port, requestBody, threadId, processId);
             
             String responseBody = String.format("Hello from Server at %s:%d (Thread: %d, Process: %s)",
                     ip, port, threadId, processId);
