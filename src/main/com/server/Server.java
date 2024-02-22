@@ -1,3 +1,4 @@
+// Server.java
 package com.server;
 
 import org.apache.logging.log4j.LogManager;
@@ -20,10 +21,12 @@ public class Server {
     private static final Logger logger = LogManager.getLogger(Server.class);
     private String ip;
     private int port;
+    private ServerHealth serverHealth;
 
     public Server(String ip, int port) {
         this.ip = ip;
         this.port = port;
+        this.serverHealth = new ServerHealth(); // Initialize server health
     }
 
     public void start() {
@@ -32,13 +35,20 @@ public class Server {
         Configurator.setRootLevel(Level.valueOf(logLevel));
 
         logger.info("Server started on {}:{}", ip, port);
-        
+
+        // Start the background health check
+        startHealthCheck();
+
         // Spark
         Spark.ipAddress(ip);
         Spark.port(port);
+
         Spark.threadPool(8);
         Spark.init();
+
         Spark.get("/", new RequestHandler());
+        Spark.get("/health", new HealthCheckHandler());
+        Spark.get("/togglehealth", new ToggleHealthHandler());
 
         // Register a shutdown hook to gracefully shutdown the server
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -46,6 +56,27 @@ public class Server {
             stopSparkServer();
             logger.info("Server on {}:{} shutdown complete.", ip, port);
         }));
+    }
+
+    private void startHealthCheck() {
+        // Start a background task to periodically check the server's health
+        new Thread(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(5000); // Check health every 5 seconds
+                    boolean currentHealth = serverHealth.isHealthy();
+                    logServerHealth(currentHealth);
+                } catch (InterruptedException e) {
+                    logger.error("Health check thread interrupted.", e);
+                    Thread.currentThread().interrupt();
+                }
+            }
+        }).start();
+    }
+
+    private void logServerHealth(boolean isHealthy) {
+        String status = isHealthy ? "healthy" : "unhealthy";
+        logger.info("Health check: Server at {}:{} is {}", ip, port, status);
     }
 
     private void stopSparkServer() {
@@ -57,10 +88,10 @@ public class Server {
         public String handle(Request request, Response response) throws Exception {
             long threadId = Thread.currentThread().threadId();
             String processId = ManagementFactory.getRuntimeMXBean().getName();
-    
+
             String clientIpAddress = request.ip();
             int clientPort = request.port();
-    
+
             String requestBody = request.body();
             logger.info("Request received from {}:{} on {}:{}: {} (Thread: {}, Process: {})",
                     clientIpAddress, clientPort, ip, port, requestBody, threadId, processId);
@@ -69,7 +100,38 @@ public class Server {
                     ip, port, threadId, processId);
             response.type("text/plain");
             response.header("Content-Length", String.valueOf(responseBody.getBytes().length));
+
             return responseBody;
         }
     }
+
+    private class HealthCheckHandler implements Route {
+        @Override
+        public String handle(Request request, Response response) throws Exception {
+            if (serverHealth.isHealthy()) {
+                return "Server is healthy";
+            } else {
+                response.status(503); // Service Unavailable
+                return "Service is unavailable";
+            }
+        }
+    }
+
+    private class ToggleHealthHandler implements Route {
+        @Override
+        public String handle(Request request, Response response) throws Exception {
+            // Toggle health status
+            boolean currentHealth = serverHealth.isHealthy();
+            if (currentHealth) {
+                serverHealth.markAsUnhealthy();
+                logger.info("Health toggled: Server at {}:{} marked as unhealthy", ip, port);
+            } else {
+                serverHealth.markAsHealthy();
+                logger.info("Health toggled: Server at {}:{} marked as healthy", ip, port);
+            }
+            // Return updated health status
+            String status = serverHealth.isHealthy() ? "healthy" : "unhealthy";
+            return "Server at " + ip + ":" + port + " is now " + status;
+        }
+    }    
 }
