@@ -53,6 +53,10 @@ curl -vL http://127.0.0.1:8080
 
 The output logs can be monitored.
 
+## Demo
+
+[Watch Demo Video](demo/demo.mp4)
+
 Kill the run_loadbalancer.sh script first and then the run_server.sh next using Ctrl/Command + C.
 
 Make use of the following command to remove dist and build directories:
