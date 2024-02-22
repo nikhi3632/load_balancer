@@ -59,12 +59,16 @@ public class Server {
     }
 
     private void startHealthCheck() {
-        // Start a background task to periodically check the server's health
         new Thread(() -> {
             while (true) {
                 try {
+                    // boolean previousHealth = serverHealth.isHealthy(); // Initialize with current health status
                     Thread.sleep(5000); // Check health every 5 seconds
                     boolean currentHealth = serverHealth.isHealthy();
+                    // if (currentHealth != previousHealth) {
+                    //     logServerHealth(currentHealth);
+                    //     previousHealth = currentHealth; // Update previous health status
+                    // }
                     logServerHealth(currentHealth);
                 } catch (InterruptedException e) {
                     logger.error("Health check thread interrupted.", e);
