@@ -51,8 +51,13 @@ public class Server {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             logger.info("Shutting down server on {}:{}", ip, port);
             gracefulShutdownServer();
+            stopSparkServer();
             logger.info("Server on {}:{} shutdown complete.", ip, port);
         }));
+    }
+
+    private void stopSparkServer() {
+        Spark.stop();
     }
 
     private void gracefulShutdownServer() {
@@ -88,7 +93,6 @@ public class Server {
                 response.body(responseBody);
                 return responseBody;
             });
-
             return response;
         }
     }
