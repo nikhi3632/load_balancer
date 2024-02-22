@@ -3,6 +3,7 @@
 To setup development environment clone the repository and fire up [Docker Desktop](https://www.docker.com/products/docker-desktop/) and use the following commands:
 
 ```bash
+cd load_balancer
 make docker-build
 make docker-run
 ```
