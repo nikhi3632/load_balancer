@@ -1,5 +1,3 @@
-CC := java
-LOG_LEVEL := INFO
 IMAGE_NAME := loadbalancer
 IMAGE_TAG := latest
 PROJECT_DIR := $(CURDIR)
